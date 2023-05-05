@@ -90,19 +90,20 @@ app.post('/login', function(req, res){
 	let password = req.body.password;
 	
 	// Clear any old sessions from the user's record
-	let clearSessionQuery = "UPDATE appusers SET session = NULL WHERE username=?";
-	mysqlConn.query(clearSessionQuery, [userName], function(err) {
+	let clearSessionQuery = "UPDATE appusers SET session = NULL WHERE username='" + userName + "'";
+	console.log(clearSessionQuery);
+	mysqlConn.query(clearSessionQuery, function(err) {
         if (err) throw err;
     });	
 	
 	
 	// Construct the query
-	let query = "SELECT username,password FROM appusers WHERE username= ? AND password= ?"; 
+	let query = "SELECT username,password FROM appusers WHERE username='" + userName + "' AND password='" + password + "'"; 
 	console.log(query);
 			
 				
 	// Query the DB for the user
-	mysqlConn.query(query, [userName, password], function(err, qResult){
+	mysqlConn.query(query, function(err, qResult){
 					
 		if(err) throw err;
 					
@@ -178,7 +179,13 @@ app.post('/login', function(req, res){
 // @param req - the request
 // @param res - the response
 app.get('/logout', function(req, res){
-
+	// if (req.session) {
+    //     let clearSessionQuery = "UPDATE appusers SET session = NULL WHERE username = ?";
+    //     mysqlConn.query(clearSessionQuery, [req.session.username], function(err) {
+    //         if (err) throw err;
+    //     });
+    // }
+	
 	// Kill the session
 	req.session.reset();
 	
