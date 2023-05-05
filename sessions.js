@@ -23,6 +23,7 @@ const  mysqlConn = mysql.createConnection({
 	host: "localhost",
 	user: "appaccount",
 	password: "apppass",
+	database: "users",
 	multipleStatements: true
 	
 });
