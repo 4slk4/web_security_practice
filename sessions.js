@@ -19,13 +19,15 @@ const app = express();
 app.set('view engine', 'ejs');
 
 // Connect to the database
-const  mysqlConn = mysql.createConnection({
+const mysqlConn = mysql.createConnection({
 	host: "localhost",
 	user: "appaccount",
 	password: "apppass",
+	database: "users",
 	multipleStatements: true
 	
 });
+mysqlConn.connect();
 
 
 // Needed to parse the request body
@@ -87,50 +89,69 @@ app.post('/login', function(req, res){
 	let userName = req.body.username;
 	let password = req.body.password;
 	
-			
+	// Clear any old sessions from the user's record
+	let clearSessionQuery = "UPDATE appusers SET session = NULL WHERE username=?";
+	mysqlConn.query(clearSessionQuery, [userName], function(err) {
+        if (err) throw err;
+    });	
+	
+	
 	// Construct the query
-	let query = "USE users; SELECT username,password from appusers where username='" + userName + "' AND password='" + password + "'"; 
+	let query = "SELECT username,password FROM appusers WHERE username= ? AND password= ?"; 
 	console.log(query);
 			
 				
 	// Query the DB for the user
-	mysqlConn.query(query, function(err, qResult){
+	mysqlConn.query(query, [userName, password], function(err, qResult){
 					
 		if(err) throw err;
 					
-		console.log(qResult[1]);	
-		
-		// Does the password match?
-		let match = false;
-			
-		// Go through the results of the second query
-		for(let account of qResult[1])
-		{
-			
-			if(account['username'] == userName && account['password'] == password)
-			{
-				console.log("Match!");
-				
-				// We have a match!
-				match = true;
-				
-				//break;
-				
-			}
-		};
-
-		// Login succeeded! Set the session variable and send the user
-		// to the dashboard
-		if(match)
-		{
+		if(qResult.length > 0) {
 			req.session.username = userName;
+			req.session.info = qResult[0].info;
+
+			let updateSessionQuery = "UPDATE appusers SET session = ? WHERE username = ?";
+			mysqlConn.query(updateSessionQuery, [req.session.id, userName], function(err) {
+                if (err) throw err;
+            });
+
 			res.redirect('/dashboard');
+
+		} else {
+			res.send("<b>Wrong</b>");
 		}
-		else
-		{
-			// If no matches have been found, we are done
-			res.send("<b>Wrong</b>");				
-		}
+		
+		// // Does the password match?
+		// let match = false;
+			
+		// // Go through the results of the second query
+		// for(let account of qResult[1])
+		// {
+			
+		// 	if(account['username'] == userName && account['password'] == password)
+		// 	{
+		// 		console.log("Match!");
+				
+		// 		// We have a match!
+		// 		match = true;
+				
+		// 		//break;
+				
+		// 	}
+		// };
+
+		// // Login succeeded! Set the session variable and send the user
+		// // to the dashboard
+		// if(match)
+		// {
+		// 	req.session.username = userName;
+		// 	res.redirect('/dashboard');
+		// }
+		// else
+		// {
+		// 	// If no matches have been found, we are done
+		// 	res.send("<b>Wrong</b>");				
+		// }
 	});
 	
 	
