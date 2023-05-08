@@ -6,6 +6,9 @@ const  express = require('express');
 // Import client sessions
 const sessions = require('client-sessions');
 
+// Import UUID
+const { v4: uuidv4 } = require('uuid');
+
 // The body parser
 const bodyParser = require("body-parser");
 
@@ -23,9 +26,7 @@ const mysqlConn = mysql.createConnection({
 	host: "localhost",
 	user: "appaccount",
 	password: "apppass",
-	database: "users",
 	multipleStatements: true
-	
 });
 mysqlConn.connect();
 
@@ -37,10 +38,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // The session settings middleware	
 app.use(sessions({
-  cookieName: 'session',
-  secret: 'random_string_goes_here',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+	secret: "hellokitty",
+	cookieName: 'session',
+	cookie: { httpOnly: true, 
+			  secure: false, 
+			  maxAge: null },
+	resave: false,
+	duration: 30 * 60 * 1000,
+	activeDuration: 5 * 60 * 1000,
 })); 
 
 // The default page
@@ -89,30 +94,24 @@ app.post('/login', function(req, res){
 	let userName = req.body.username;
 	let password = req.body.password;
 	
-	// Clear any old sessions from the user's record
-	let clearSessionQuery = "UPDATE appusers SET session = NULL WHERE username='" + userName + "'";
-	console.log(clearSessionQuery);
-	mysqlConn.query(clearSessionQuery, function(err) {
-        if (err) throw err;
-    });	
-	
 	
 	// Construct the query
-	let query = "SELECT username,password FROM appusers WHERE username='" + userName + "' AND password='" + password + "'"; 
+	let query = "USE users;SELECT username,password FROM appusers WHERE username=? AND password=?"; 
 	console.log(query);
 			
 				
 	// Query the DB for the user
-	mysqlConn.query(query, function(err, qResult){
+	mysqlConn.query(query, [userName, password], function(err, qResult){
 					
 		if(err) throw err;
 					
 		if(qResult.length > 0) {
 			req.session.username = userName;
-			req.session.info = qResult[0].info;
+			req.session.id = uuidv4();
 
-			let updateSessionQuery = "UPDATE appusers SET session = ? WHERE username = ?";
-			mysqlConn.query(updateSessionQuery, [req.session.id, userName], function(err) {
+			let updateSessionQuery = "UPDATE appusers SET session='" + req.session.id + "' WHERE username='" + req.session.username + "'";
+			console.log(updateSessionQuery);
+			mysqlConn.query(updateSessionQuery, function(err) {
                 if (err) throw err;
             });
 
@@ -179,12 +178,6 @@ app.post('/login', function(req, res){
 // @param req - the request
 // @param res - the response
 app.get('/logout', function(req, res){
-	// if (req.session) {
-    //     let clearSessionQuery = "UPDATE appusers SET session = NULL WHERE username = ?";
-    //     mysqlConn.query(clearSessionQuery, [req.session.username], function(err) {
-    //         if (err) throw err;
-    //     });
-    // }
 	
 	// Kill the session
 	req.session.reset();
