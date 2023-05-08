@@ -1,0 +1,28 @@
+<html>
+<title> Register </title>
+<body bgcolor="lightblue">
+<h1>Register an account</h1>
+<br>
+
+<form action="/register" method="post">
+  New username:<br>
+  <input type="text" name="username" value="">
+  <br>
+  New Password:<br>
+  <input type="password" name="new_password" value="">
+  <br>
+  Confirm Password:<br>
+  <input type="password" name="confirm_password" value="">
+  <br>
+  New Info:<br>
+  <input type="text" name="info" value="">
+  <br><br>
+  <input type="submit" value="Register">
+</form> 
+
+<% if (message) { %> 
+  <p><%= message %></p>
+<% } %>
+
+</body>
+</html>

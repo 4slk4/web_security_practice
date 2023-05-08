@@ -11,9 +11,13 @@
   Password:<br>
   <input type="password" name="password" value="">
   <br><br>
-  <input type="submit" value="Submit">
-</form> 
+  <input type="submit" value="Signin">
 </form>
+<p>Register <a href="/register">here</a></p>
+
+<% if (message) { %> 
+  <p><%= message %></p>
+<% } %>
 
 </body>
 </html>
