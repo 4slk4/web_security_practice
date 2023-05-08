@@ -138,7 +138,7 @@ app.post('/login', function(req, res){
 					req.session.id = uuidv4();
 					
 					// Update the session ID in the database
-					let updateSessionQuery = "UPDATE appusers SET session='" + req.session.id + "' WHERE username='" + req.session.username + "'";
+					const updateSessionQuery = "UPDATE appusers SET session='" + req.session.id + "' WHERE username='" + req.session.username + "'";
 					mysqlConn.query(updateSessionQuery, function(err) {
 						if (err) throw err;
 					});
@@ -230,6 +230,13 @@ app.post('/register', function(req, res){
  * @param res - the response
  */
 app.get('/logout', function(req, res){
+	
+	// Clear the session from user
+	const clearSessionQuery = "USE users;UPDATE appusers SET session='not logged in' WHERE username='" + req.session.username + "'";
+	mysqlConn.query(updateSessionQuery, function(err) {
+		if (err) throw err;
+		console.log("Clear user session")
+	});
 	
 	// Disconnect MariaDB
 	mysqlConn.end((err) => {
