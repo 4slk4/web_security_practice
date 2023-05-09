@@ -26,8 +26,8 @@ to grant `SELECT, INSERT, UPDATE` privileges to `appaccount`.
 6. Run `node sessions.js` and then open browser enter address `https://localhost:3000/`
 
 ## Group members
-Khang Ta
-Ethan Bartlett
-Sebastian Reyes
-Edmond Tongyou
-Miranda Smith
+-Khang Ta
+-Ethan Bartlett
+-Sebastian Reyes
+-Edmond Tongyou
+-Miranda Smith
