@@ -28,6 +28,6 @@ to grant `SELECT, INSERT, UPDATE` privileges to `appaccount`.
 ## Group members
 - Khang Ta
 - Ethan Bartlett
-- Sebastian Reyes
 - Edmond Tongyou
+- Sebastian Reyes
 - Miranda Smith
