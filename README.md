@@ -18,6 +18,6 @@ Use the node.js's bcrypt package to securely store and verify passwords (in the 
 2. Create `appusers` table with following schemas: `username`, `password`, `info`, `session`
 3. Create user `appaccount` with password `apppass`
 4. Run query `GRANT SELECT, INSERT, UPDATE ON users.appusers TO 'appaccount'@'localhost';`
-to grant `SELECT, INSERT, UPDATE` privileges for `appaccount`.
+to grant `SELECT, INSERT, UPDATE` privileges to `appaccount`.
 5. Navigate to the main directory of `web_security_practice` and run `npm install` to install dependencies
 6. Run `node sessions.js` and then open browser enter address `https://localhost:3000/` 
