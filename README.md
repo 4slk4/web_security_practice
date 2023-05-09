@@ -14,8 +14,8 @@ Use the node.js's bcrypt package to securely store and verify passwords (in the 
 10. Make sure that the webapp has a privilege-restricted database account.
 
 ## How to run
-1. Create a MySQL database named `users` with hostname `localhost`
-2. Create `appusers` table with followinng schemas: `username, password, info, session`
+1. Create a MySQL database `users` with hostname: `localhost`
+2. Create `appusers` table with following schemas: `username`, `password`, `info`, `session`
 3. Create user `appaccount` with password `apppass`
 4. Run query `GRANT SELECT, INSERT, UPDATE ON users.appusers TO 'appaccount'@'localhost';`
 to grant `SELECT, INSERT, UPDATE` privileges for `appaccount`.
