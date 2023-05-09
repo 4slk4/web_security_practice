@@ -1,5 +1,5 @@
 # Web Security Practice
-## Requirements
+## Objectives
 
 1. Add a "session" attribute to the appusers table.
 2. When the user logs in, store the session ID in the "session" attribute of the user's record.  Please do not make any other changes to the database.
@@ -12,3 +12,12 @@ Use the node.js's bcrypt package to securely store and verify passwords (in the 
 8. Configure the client-sessions package to have the session expire after 10 mins inactivity (which the program already uses).
 9. Add CSP protection and make session cookies HTTPOnly to ensure some protection against XSS.
 10. Make sure that the webapp has a privilege-restricted database account.
+
+## How to run
+1. Create a MySQL database named `users` with hostname `localhost`
+2. Create `appusers` table with followinng schemas: `username, password, info, session`
+3. Create user `appaccount` with password `apppass`
+4. Run query `GRANT SELECT, INSERT, UPDATE ON users.appusers TO 'appaccount'@'localhost';`
+to grant `SELECT, INSERT, UPDATE` privileges for `appaccount`.
+5. Navigate to the main directory of `web_security_practice` and run `npm install` to install dependencies
+6. Run `node sessions.js` and then open browser enter address `https://localhost:3000/` 
