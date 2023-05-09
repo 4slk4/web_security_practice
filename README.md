@@ -1,4 +1,7 @@
 # Web Security Practice
+## Requirement
+`Node.js >= v18.0`
+
 ## Objectives
 
 1. Add a "session" attribute to the appusers table.
@@ -20,4 +23,11 @@ Use the node.js's bcrypt package to securely store and verify passwords (in the 
 4. Run query `GRANT SELECT, INSERT, UPDATE ON users.appusers TO 'appaccount'@'localhost';`
 to grant `SELECT, INSERT, UPDATE` privileges to `appaccount`.
 5. Navigate to the main directory of `web_security_practice` and run `npm install` to install dependencies
-6. Run `node sessions.js` and then open browser enter address `https://localhost:3000/` 
+6. Run `node sessions.js` and then open browser enter address `https://localhost:3000/`
+
+## Group members
+Khang Ta
+Ethan Bartlett
+Sebastian Reyes
+Edmond Tongyou
+Miranda Smith
